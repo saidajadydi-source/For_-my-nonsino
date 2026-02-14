@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Celebration 💖</title>
+<style>
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  background: linear-gradient(to right, #ff9eb0, #ffc0cb);
+  color:white;
+  overflow:hidden;
+}
+section { display:none; padding:30px; position:relative; height:100vh; }
+
+/* Rain hearts & emojis */
+.rainSymbol {
+  position:absolute;
+  font-size:20px;
+  opacity:0.8;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% {transform: translateY(-10vh);}
+  100% {transform: translateY(110vh);}
+}
+
+/* Inputs and buttons */
+input[type="text"], input[type="file"] {
+  padding:12px;
+  font-size:18px;
+  width:80%;
+  max-width:400px;
+  margin:10px 0;
+  border-radius:8px;
+  border:none;
+}
+button {
+  padding:14px 30px;
+  margin:15px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+/* Page 5 big message */
+#page5Message {
+  font-size:120px;
+  font-family:'Lucida Calligraphy', cursive;
+  font-weight:bold;
+  color:#ff1a75;
+  text-shadow:3px 3px 15px #ffebef;
+  margin-top:50px;
+}
+#page5SubMessage {
+  font-size:50px;
+  margin-top:20px;
+  color:#ffe6f0;
+  font-weight:bold;
+}
+
+/* Quiz answers container with gradient background */
+#allAnswers {
+  margin-top:30px;
+  font-size:18px;
+  background: linear-gradient(135deg, #ffe6f0, #ffccd9, #ffc0cb);
+  padding:20px;
+  border-radius:15px;
+}
+</style>
+</head>
+<body>
+
+<!-- Music -->
+<audio id="music" src="CinnamonGirl.mp3" loop></audio>
+
+<!-- Page 1 -->
+<section id="page1">
+  <h1>💖 Welcome nonosi 💖</h1>
+  <button onclick="nextPage('page2')">Next</button>
+</section>
+
+<!-- Page 2 -->
+<section id="page2">
+  <h1>Do you love me? 😻</h1>
+  <button onclick="nextPage('page3')">Yes 💖</button>
+  <button onclick="alert('Try again 😉')">No ❌</button>
+</section>
+
+<!-- Page 3 -->
+<section id="page3">
+  <h1>Enter secret code 🔒</h1>
+  <input type="file" id="imageInput">
+</section>
+
+<!-- Page 4 -->
+<section id="page4">
+  <h1>Quiz: 3la 3al9tna 💌</h1>
+  <div id="question"></div>
+  <input type="text" id="answerInput" placeholder="Write your answer here...">
+  <br>
+  <button onclick="submitAnswer()">Next</button>
+</section>
+
+<!-- Page 5 -->
+<section id="page5">
+  <div id="page5Message">HAPPY VALENTINE’S DAY</div>
+  <div id="page5SubMessage">je t’aime 💕</div>
+  <div id="allAnswers"></div>
+</section>
+
+<script>
+// ===== Variables =====
+let currentQ=0;
+const userAnswers=[];
+const correctHash="e2a5b1910c38aea6f86fb816e955c57fb34b46c4bdcb3e446655871ca785b17a"; // مثال
+const questions=[
+"chno hiya lhaja li kat3jbk fia bzaf omatatgolahch lia?😻",
+"chnahiya lhaja li tatkhaf tf9dha fhad lrelation dyalna?😺",
+"chnahiya lhda li 3mrha tnsa lik binatna?😊",
+"chno aktr haja katkhlik ths m3aya bl aman?😸",
+"chno hiya lhaja li tatfrhk mli tfkr fiha bini obink?😻",
+"katfkr fmosta9balna?💕",
+"kaths dsa3ada m3aya?💖",
+"chno aktr klma ola tasarof mni kaykhlik tsh b hoob?🙃😻",
+"chna howa lholm li biti th99 m3aya?😻",
+"kaths bhob dyalna?😻🙃",
+"chna howa raeyk fhad lmachkil kamla o dorf lidazt 3lina?🙂😺",
+"3ndk chi haja tsarhni biha mrhba?😻💗"
+];
+
+// ===== Page navigation & music =====
+function showPage(id){document.querySelectorAll('section').forEach(s=>s.style.display='none'); document.getElementById(id).style.display='block';}
+function nextPage(id){
+  showPage(id);
+  const music=document.getElementById('music');
+  if(music.paused){music.play().catch(e=>console.log("User interaction needed to play music"));}
+}
+
+// ===== Rain hearts & emojis 1–5 =====
+function createRain(){
+  const symbols=['❤️','💖','😻','😺','💞'];
+  const el=document.createElement('div');
+  el.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+  el.className='rainSymbol';
+  el.style.left=Math.random()*100+'vw';
+  el.style.fontSize=(10+Math.random()*20)+'px';
+  el.style.animationDuration=(3+Math.random()*5)+'s';
+  document.querySelectorAll('section').forEach(sec=>{
+    if(sec.style.display!=='none') sec.appendChild(el.cloneNode(true));
+  });
+  setTimeout(()=>el.remove(),8000);
+}
+setInterval(createRain,300);
+
+// ===== Quiz =====
+function showQuestion(){
+  if(currentQ<questions.length){
+    document.getElementById("question").textContent=questions[currentQ];
+    document.getElementById("answerInput").value='';
+  } else {showPage('page5'); displayAnswers();}
+}
+function submitAnswer(){
+  const ans=document.getElementById("answerInput").value.trim();
+  if(ans===""){alert("Please write your answer 😅"); return;}
+  userAnswers.push(ans);
+  currentQ++;
+  showQuestion();
+}
+function displayAnswers(){
+  const div=document.getElementById("allAnswers");
+  div.innerHTML="<h3>Your Answers:</h3><ol>"+userAnswers.map(a=>`<li>${a}</li>`).join('')+"</ol>";
+}
+
+// ===== Start =====
+showPage('page1');
+</script>
+</body>
+</html>
