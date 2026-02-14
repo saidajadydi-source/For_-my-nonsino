@@ -2,29 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Valentine Celebration 💖</title>
+<title>For Ilyass 💖 Romantic Rain</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Caligraffia&display=swap');
+
 body {
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family:Arial, sans-serif;
   text-align:center;
   background: linear-gradient(to right, #ff9eb0, #ffc0cb);
   color:white;
   overflow:hidden;
 }
 section { display:none; padding:30px; position:relative; height:100vh; }
-
-/* Rain hearts & emojis */
-.rainSymbol {
-  position:absolute;
-  font-size:20px;
-  opacity:0.8;
-  animation: fall linear infinite;
-}
-@keyframes fall {
-  0% {transform: translateY(-10vh);}
-  100% {transform: translateY(110vh);}
-}
 
 /* Inputs and buttons */
 input[type="text"], input[type="file"] {
@@ -45,57 +35,75 @@ button {
   font-size:18px;
 }
 
-/* Page 5 big message */
-#page5Message {
-  font-size:120px;
-  font-family:'Lucida Calligraphy', cursive;
-  font-weight:bold;
-  color:#ff1a75;
-  text-shadow:3px 3px 15px #ffebef;
-  margin-top:50px;
-}
-#page5SubMessage {
-  font-size:50px;
-  margin-top:20px;
-  color:#ffe6f0;
-  font-weight:bold;
+/* Love message fade-in */
+@keyframes fadeIn {
+  0% {opacity:0; transform:scale(0.8);}
+  100% {opacity:1; transform:scale(1);}
 }
 
-/* Quiz answers container with gradient background */
-#allAnswers {
+/* Floating hearts for all pages */
+.floating {
+  position:absolute;
+  font-size:30px;
+  opacity:0.8;
+  animation: floatUp linear infinite;
+  pointer-events:none;
+}
+@keyframes floatUp {
+  0% {transform: translateY(100vh) rotate(0deg);}
+  100% {transform: translateY(-10vh) rotate(360deg);}
+}
+
+/* Page 5 special background */
+#page5 {
+  background: url('https://i.ibb.co/4PWVqM6/flowers-bg.png') no-repeat center center/cover;
+  color:#ff4d6d;
+}
+#page5 h1 {
+  font-family: 'Caligraffia', cursive;
+  font-size:80px;
+  margin-top:50px;
+}
+#page5 h2 {
+  font-size:24px;
+  font-family: Arial, sans-serif;
+  margin-top:20px;
+  color:#333;
+}
+.bigHeartFinal {
+  font-size:180px;
+  animation: spin 4s linear infinite;
   margin-top:30px;
-  font-size:18px;
-  background: linear-gradient(135deg, #ffe6f0, #ffccd9, #ffc0cb);
-  padding:20px;
-  border-radius:15px;
+}
+@keyframes spin{
+  0% {transform:rotate(0deg);}
+  100% {transform:rotate(360deg);}
 }
 </style>
 </head>
 <body>
 
-<!-- Music -->
-<audio id="music" src="CinnamonGirl.mp3" loop></audio>
-
-<!-- Page 1 -->
+<!-- Page 1: Intro -->
 <section id="page1">
   <h1>💖 Welcome nonosi 💖</h1>
-  <button onclick="nextPage('page2')">Next</button>
+  <button onclick="startMusic()">Next</button>
 </section>
 
-<!-- Page 2 -->
+<!-- Page 2: Love question -->
 <section id="page2">
-  <h1>Do you love me? 😻</h1>
-  <button onclick="nextPage('page3')">Yes 💖</button>
+  <h1> ilyass....  Do you love me? 😻</h1>
+  <button onclick="loveYes()">Yes 💖</button>
   <button onclick="alert('Try again 😉')">No ❌</button>
+  <div id="loveMsg" style="margin-top:20px; font-size:24px; color:#ffebef; display:none; animation: fadeIn 2s;"></div>
 </section>
 
-<!-- Page 3 -->
+<!-- Page 3: Secret code -->
 <section id="page3">
-  <h1>Enter secret code 🔒</h1>
+  <h1>Enter secret code 🔒 (lcode 3ibara 3an image kayna 3ndk tatjm3 smyti osmytk 9dr achna hiya 🍒🦋)</h1>
   <input type="file" id="imageInput">
 </section>
 
-<!-- Page 4 -->
+<!-- Page 4: Quiz -->
 <section id="page4">
   <h1>Quiz: 3la 3al9tna 💌</h1>
   <div id="question"></div>
@@ -104,24 +112,28 @@ button {
   <button onclick="submitAnswer()">Next</button>
 </section>
 
-<!-- Page 5 -->
+<!-- Page 5: Final message -->
 <section id="page5">
-  <div id="page5Message">HAPPY VALENTINE’S DAY</div>
-  <div id="page5SubMessage">je t’aime 💕</div>
-  <div id="allAnswers"></div>
+  <h1>Happy Valentine’s Day</h1>
+  <h2>Je t'aime</h2>
+  <div class="bigHeartFinal">💞</div>
+  <div id="allAnswers" style="margin-top:30px; font-size:18px;"></div>
 </section>
+
+<!-- Music -->
+<audio id="music" src="CinnamonGirl.mp3" loop></audio>
 
 <script>
 // ===== Variables =====
 let currentQ=0;
 const userAnswers=[];
-const correctHash="e2a5b1910c38aea6f86fb816e955c57fb34b46c4bdcb3e446655871ca785b17a"; // مثال
+const correctHash="e2a5b1910c38aea6f86fb816e955c57fb34b46c4bdcb3e446655871ca785b17a";
 const questions=[
 "chno hiya lhaja li kat3jbk fia bzaf omatatgolahch lia?😻",
 "chnahiya lhaja li tatkhaf tf9dha fhad lrelation dyalna?😺",
 "chnahiya lhda li 3mrha tnsa lik binatna?😊",
 "chno aktr haja katkhlik ths m3aya bl aman?😸",
-"chno hiya lhaja li tatfrhk mli tfkr fiha bini obink?😻",
+"chnahiya lhaja li tatfrhk mli tfkr fiha bini obink?😻",
 "katfkr fmosta9balna?💕",
 "kaths dsa3ada m3aya?💖",
 "chno aktr klma ola tasarof mni kaykhlik tsh b hoob?🙃😻",
@@ -131,36 +143,67 @@ const questions=[
 "3ndk chi haja tsarhni biha mrhba?😻💗"
 ];
 
-// ===== Page navigation & music =====
-function showPage(id){document.querySelectorAll('section').forEach(s=>s.style.display='none'); document.getElementById(id).style.display='block';}
-function nextPage(id){
-  showPage(id);
-  const music=document.getElementById('music');
-  if(music.paused){music.play().catch(e=>console.log("User interaction needed to play music"));}
+// ===== Functions =====
+function showPage(id){
+  document.querySelectorAll('section').forEach(s=>s.style.display='none');
+  document.getElementById(id).style.display='block';
+}
+function nextPage(id){showPage(id);}
+
+// ===== Page 1: start music =====
+function startMusic(){
+  document.getElementById("music").play().catch(e=>console.log(e));
+  nextPage('page2');
 }
 
-// ===== Rain hearts & emojis 1–5 =====
-function createRain(){
-  const symbols=['❤️','💖','😻','😺','💞'];
+// Page 2: love question
+function loveYes(){
+  const msg = document.getElementById('loveMsg');
+  msg.textContent = "I knew it… wana tanbghik tkr💍❤️";
+  msg.style.display = 'block';
+  for(let i=0;i<20;i++){ setTimeout(createFloatingHeart, i*150); }
+  setTimeout(()=>nextPage('page3'),3000);
+}
+
+// Page-wide rain for all pages
+function createFloatingHeart(){
+  const symbols=['❤️','💖','😻','😺','💞','💗','🌺','💋','💍','🤗','🦋','🍒','💏','🍃','🎀','🧸'];
   const el=document.createElement('div');
-  el.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-  el.className='rainSymbol';
+  el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  el.className='floating';
   el.style.left=Math.random()*100+'vw';
-  el.style.fontSize=(10+Math.random()*20)+'px';
-  el.style.animationDuration=(3+Math.random()*5)+'s';
-  document.querySelectorAll('section').forEach(sec=>{
-    if(sec.style.display!=='none') sec.appendChild(el.cloneNode(true));
-  });
-  setTimeout(()=>el.remove(),8000);
+  el.style.fontSize=(10+Math.random()*25)+'px';
+  el.style.animationDuration=(4+Math.random()*6)+'s';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),10000);
 }
-setInterval(createRain,300);
+setInterval(createFloatingHeart,200);
 
-// ===== Quiz =====
+// Step 3: Verify secret code
+document.getElementById("imageInput").addEventListener("change",function(){
+  const file=this.files[0];
+  const reader=new FileReader();
+  reader.onload=async function(){
+    const buffer=reader.result;
+    const hashBuffer=await crypto.subtle.digest('SHA-256',buffer);
+    const hashArray=Array.from(new Uint8Array(hashBuffer));
+    const hashHex=hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');
+    if(hashHex===correctHash){
+      alert("Code sahih! 🎉 bda daba Quizí.");
+      nextPage('page4');
+      showQuestion();
+    }
+    else{alert("Code ghalt 3awd 3atany ❌");}
+  }
+  reader.readAsArrayBuffer(file);
+});
+
+// Step 4: Quiz
 function showQuestion(){
   if(currentQ<questions.length){
     document.getElementById("question").textContent=questions[currentQ];
     document.getElementById("answerInput").value='';
-  } else {showPage('page5'); displayAnswers();}
+  } else {nextPage('page5'); displayAnswers();}
 }
 function submitAnswer(){
   const ans=document.getElementById("answerInput").value.trim();
